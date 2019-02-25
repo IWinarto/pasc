@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Author: Irsan Winarto
+#
+# Use this script for moving all audio streams to the output audio device (sink) 
+# of your choice. Other uses include listing all available sinks, muting the audio 
+# device, and adjusting the volume.
+#
+# This script only works with PulseAudio server.
+
+print_usage() {
+    printf "%s" \
+           "Usage: ${0##*/} " \
+           "list | " \
+           "mute | " \
+           "up [non-negative integer] | " \
+           "down [non-negative integer] | " \
+           "set <integer> | " \
+           "move <the sink index>" $'\n'
+} 1>&2
+
+
+if [ $# -eq 0 ] && ! [ -t 0 ]
+then
+    # read from stdin (this enables piping, redirection, and here-doc/string)
+    read -r action value
+else
+    # save them
+    action=$1
+    value=$2
+fi
+
+
+# there is only one starred (*) sink
+default_sink=$(awk '{print $NF}' <(pacmd list-sinks | grep '*'))
+
+# this ASSUMES all audio streams are directed to the DEFAULT sink (audio device)
+case ${action} in
+
+    list)
+        pacmd list-sinks
+	;;
+
+    up)
+	# increase volume by ${value}% if given; else, by 1%
+        pactl set-sink-volume ${default_sink} +${value:-1}%
+	;;
+
+    down)
+	# decrease volume by ${value}% if given; else, by 1%
+        pactl set-sink-volume ${default_sink} -${value:-1}%
+	;;
+
+    set)
+        # set the volume to the specified level
+        pactl set-sink-volume ${default_sink} ${value}%
+	;;
+
+    mute)
+        # arguments must be 'mute' only in this case
+        if [ ${#value} -ne 0 ]; then
+            print_usage
+            exit 1
+        fi
+
+        pactl set-sink-mute ${default_sink} toggle
+	;;
+
+    move)
+        # set $2 to be the default audio device
+        pacmd set-default-sink ${value}
+
+        # move all active audio streams to the specified sink
+        for stream in $(pactl list short sink-inputs | awk '{print $1}')
+        do
+            pactl move-sink-input ${stream} ${value}
+        done
+	;;
+
+    *)
+        print_usage
+        exit 1
+	;;
+esac
