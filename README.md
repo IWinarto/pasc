@@ -8,4 +8,4 @@ device, and adjusting the volume.
 
 ### Usage
 
-`Usage: pasc list | mute | up [non-negative integer] | down [non-negative integer] | set <integer> | move <the sink index>`
+`pasc list | mute | up [non-negative integer] | down [non-negative integer] | set <integer> | move <sink index>`
