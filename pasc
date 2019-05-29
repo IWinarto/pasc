@@ -16,7 +16,8 @@ print_usage() {
            "up [non-negative integer] | " \
            "down [non-negative integer] | " \
            "set <integer> | " \
-           "move <the sink index>" $'\n'
+           "move <the sink index> | " $'\n'
+           "volume"
 } 1>&2
 
 
