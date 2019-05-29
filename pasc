@@ -4,7 +4,7 @@
 #
 # Use this script for moving all audio streams to the output audio device (sink) 
 # of your choice. Other uses include listing all available sinks, muting the audio 
-# device, and adjusting the volume.
+# device, adjusting the volume, and printing the volume.
 #
 # This script only works with PulseAudio server.
 
