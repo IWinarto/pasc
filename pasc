@@ -77,6 +77,13 @@ case ${action} in
         done
 	;;
 
+    volume)
+        # print the volumes of left and right channels
+        pacmd dump-volumes | \
+            awk "/Sink $default_sink/"'{printf "%s %s\n%s %s\n", $5, $7, $10, $12}' \
+                FS='[[:space:]]+?/?[[:space:]]*?'
+        ;;
+
     *)
         print_usage
         exit 1
