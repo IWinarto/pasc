@@ -17,7 +17,8 @@ print_usage() {
            "down [integer >= 0] | " \
            "set <integer> | " \
            "move <sink index> | " \
-           "volume" $'\n'
+           "volume | " \
+           "restart" $'\n'
 } 1>&2
 
 
@@ -83,6 +84,10 @@ case ${action} in
         pacmd dump-volumes | \
             awk "/Sink $default_sink/"'{printf "%s %s\n%s %s\n", $5, $7, $10, $12}' \
                 FS='[[:space:]]+/?[[:space:]]*'
+        ;;
+
+    restart)
+        pulseaudio -k && pulseaudio --start
         ;;
 
     *)
