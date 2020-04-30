@@ -4,7 +4,7 @@ This is a custom bash script for controlling audio sinks on PulseAudio server.
 
 Use this script for moving all audio streams to the output audio device (sink) 
 of your choice. Other uses include listing all available sinks, muting the audio 
-device, adjusting the volume, restarting the audio server, and printing the volume.
+device, adjusting the volume, printing the volume, and restarting the audio server.
 
 ### Usage
 
