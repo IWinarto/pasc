@@ -88,8 +88,8 @@ case ${action} in
 
     restart)
 	{
-	    pulseaudio -k
-	    wait
+	    pulseaudio -k &
+	    wait "$!"
 	    pulseaudio --start
 	} &>/dev/null
         ;;
